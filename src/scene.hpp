@@ -10,6 +10,8 @@
 #include "ray.hpp"
 #include "sphere.hpp"
 
+namespace rt {
+
 // for complex objects to be placed inside of a scene...
 template <typename T>
 concept scene_value_type_compatible =
@@ -63,5 +65,7 @@ private:
   std::array<value_type, N> m_objects{};
   std::size_t m_count{};
 };
+
+} // namespace rt
 
 #endif // SCENE_HPP

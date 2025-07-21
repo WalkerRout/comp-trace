@@ -6,6 +6,8 @@
 #include "point3.hpp"
 #include "vec3.hpp"
 
+namespace rt {
+
 template <typename T>
 concept ray_value_type_compatible = requires {
   requires std::floating_point<T>;
@@ -57,5 +59,7 @@ template <ray_value_type_compatible T> struct hit_record {
 };
 
 using hit_record_d = hit_record<double>;
+
+} // namespace rt
 
 #endif // RAY_HPP

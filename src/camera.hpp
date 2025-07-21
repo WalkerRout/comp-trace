@@ -5,6 +5,8 @@
 #include "ray.hpp"
 #include "vec3.hpp"
 
+namespace rt {
+
 class camera {
 public:
   [[nodiscard]] constexpr camera() noexcept {
@@ -30,5 +32,7 @@ private:
   vec3<double> m_horizontal;
   vec3<double> m_vertical;
 };
+
+} // namespace rt
 
 #endif // CAMERA_H

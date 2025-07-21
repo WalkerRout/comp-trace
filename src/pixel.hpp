@@ -6,6 +6,8 @@
 
 #include "colour.hpp"
 
+namespace rt {
+
 template <typename T>
 concept pixel_value_type_compatible = requires {
   requires colour_value_type_compatible<T>;
@@ -37,5 +39,7 @@ private:
 };
 
 using pixel_u8 = pixel<std::uint8_t>;
+
+} // namespace rt
 
 #endif // PIXEL_HPP

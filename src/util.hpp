@@ -6,6 +6,8 @@
 #include <numbers>
 #include <type_traits>
 
+namespace rt {
+
 // provide some way to access float_values, can specialize to recurse...
 template <typename T> struct float_type_of {
   // for basic objects like sphere
@@ -48,5 +50,7 @@ template <sqrt_compatible T> [[nodiscard]] constexpr T sqrt_constexpr(const T va
 
   return result;
 }
+
+} // namespace rt
 
 #endif // UTIL_HPP`

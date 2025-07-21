@@ -3,6 +3,8 @@
 
 #include "vec3.hpp"
 
+namespace rt {
+
 template <typename T>
 concept colour_value_type_compatible = requires {
   requires vec3_value_type_compatible<T>;
@@ -51,5 +53,7 @@ private:
 };
 
 using colour_d = colour<double>;
+
+} // namespace rt
 
 #endif // COLOUR_HPP

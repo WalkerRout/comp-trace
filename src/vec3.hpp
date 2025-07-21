@@ -6,6 +6,8 @@
 
 #include "util.hpp"
 
+namespace rt {
+
 template <typename T>
 concept vec3_value_type_compatible = requires {
   requires std::is_arithmetic_v<T> && !std::is_same_v<std::remove_cv_t<T>, bool>;
@@ -127,5 +129,7 @@ template <vec3_value_type_compatible T>
 {
   return v / v.length();
 }
+
+} // namespace rt
 
 #endif // VEC3_HPP

@@ -3,6 +3,8 @@
 
 #include "vec3.hpp"
 
+namespace rt {
+
 template <typename T>
 concept point3_value_type_compatible = requires {
   requires vec3_value_type_compatible<T>;
@@ -51,5 +53,7 @@ private:
 };
 
 using point3_d = point3<double>;
+
+} // namespace rt
 
 #endif // POINT3_HPP

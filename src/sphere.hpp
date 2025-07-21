@@ -10,6 +10,8 @@
 #include "util.hpp"
 #include "vec3.hpp"
 
+namespace rt {
+
 template <typename T>
 concept sphere_value_type_compatible = requires {
   requires point3_value_type_compatible<T>;
@@ -76,5 +78,7 @@ private:
 };
 
 using sphere_d = sphere<double>;
+
+} // namespace rt
 
 #endif // SPHERE_HPP

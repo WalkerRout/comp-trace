@@ -13,6 +13,8 @@
 
 #include "pixel.hpp"
 
+namespace rt {
+
 template <std::size_t W, std::size_t H> struct image_dimensions {
   static constexpr std::size_t width = W;
   static constexpr std::size_t height = H;
@@ -82,5 +84,7 @@ inline void save_ppm(const image<W, H>& img, const std::string& filename) {
   ofs.write(reinterpret_cast<const char*>(buffer.data()),
             static_cast<std::streamsize>(buffer.size()));
 }
+
+} // namespace rt
 
 #endif // IMAGE_HPP

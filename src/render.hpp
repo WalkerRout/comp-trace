@@ -17,6 +17,8 @@
 #include "sphere.hpp"
 #include "util.hpp"
 
+namespace rt {
+
 template <std::size_t N> using sphere_scene = scene<sphere_d, N>;
 
 [[nodiscard]] constexpr auto build_scene() noexcept -> sphere_scene<3> {
@@ -99,5 +101,7 @@ template <std::size_t Width, std::size_t Height>
 
   return img;
 }
+
+} // namespace rt
 
 #endif // RENDER_HPP

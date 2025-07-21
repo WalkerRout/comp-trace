@@ -11,13 +11,13 @@ auto main(int argc, char* argv[]) -> int {
   (void)argv;
 
   static constexpr render_params<128, 96> params{};
-  static constexpr auto img = render<params.width, params.height>();
+  static constexpr auto img = rt::render<params.width, params.height>();
 
   // dump the bytes that make up the image...
-  dump_bytes(img);
-  
+  rt::dump_bytes(img);
+
   // then save the actual image...
-  save_ppm(img, "out.ppm");
+  rt::save_ppm(img, "out.ppm");
 
   return 0;
 }
