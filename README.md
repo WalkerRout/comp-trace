@@ -1,2 +1,2 @@
 # comp-trace
-Constexpr raytracer
+Simple raytracer where all operations happen to be marked constexpr...
