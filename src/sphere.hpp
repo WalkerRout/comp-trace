@@ -28,13 +28,6 @@ public:
   [[nodiscard]] constexpr sphere(const point3<value_type>& center, const value_type radius) noexcept
       : m_center(center), m_radius(radius) {}
 
-  [[nodiscard]] constexpr auto center() const noexcept -> point3<value_type> {
-    return m_center;
-  }
-  [[nodiscard]] constexpr auto radius() const noexcept -> value_type {
-    return m_radius;
-  }
-
   [[nodiscard]] constexpr auto hit(const ray<value_type>& r, const value_type t_min,
                                    const value_type t_max) const noexcept
       -> std::optional<hit_record<value_type>> {
