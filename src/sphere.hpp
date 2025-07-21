@@ -33,8 +33,8 @@ public:
     return m_radius;
   }
 
-  [[nodiscard]] constexpr auto hit(const ray<value_type>& r, value_type t_min,
-                                   value_type t_max) const noexcept
+  [[nodiscard]] constexpr auto hit(const ray<value_type>& r, const value_type t_min,
+                                   const value_type t_max) const noexcept
       -> std::optional<hit_record<value_type>> {
     // early validation
     if (!(t_min < t_max)) {
@@ -65,8 +65,7 @@ public:
     hit_record<value_type> rec;
     rec.t = root;
     rec.p = r.at(root);
-    const vec3<value_type> outward_normal = (rec.p - m_center) / m_radius;
-    rec.set_face_normal(r, outward_normal);
+    rec.set_face_normal(r, (rec.p - m_center) / m_radius);
 
     return rec;
   }

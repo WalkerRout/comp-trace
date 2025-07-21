@@ -26,14 +26,15 @@ template <sqrt_compatible T> [[nodiscard]] constexpr T sqrt_constexpr(const T va
   T last{};
 
   // adapt iter count based on precision
-  constexpr std::size_t max_iterations = std::is_same_v<T, float> ? 6 : 10;
+  constexpr int max_iterations = std::is_same_v<T, float> ? 6 : 10;
   constexpr T epsilon = std::numeric_limits<T>::epsilon() * T{100};
 
-  for (std::size_t i = 0; i < max_iterations; ++i) {
+  for (int i = 0; i < max_iterations; ++i) {
     last = result;
     result = T{0.5} * (result + val / result);
 
-    // Check for convergence
+    // instead of doing multiple passes, could specialize float and double
+    // to converge faster using fast inverse sqrt...
     const T diff = result > last ? result - last : last - result;
     if (diff < epsilon * result) {
       break;
@@ -42,5 +43,12 @@ template <sqrt_compatible T> [[nodiscard]] constexpr T sqrt_constexpr(const T va
 
   return result;
 }
+
+template <typename T>
+concept arithmetic_type = std::is_arithmetic_v<T> && !std::same_as<std::remove_cvref_t<T>, bool>;
+
+template <std::floating_point T> inline constexpr T infinity_v = std::numeric_limits<T>::infinity();
+
+template <std::floating_point T> inline constexpr T epsilon_v = std::numeric_limits<T>::epsilon();
 
 #endif // UTIL_HPP

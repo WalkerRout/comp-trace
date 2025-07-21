@@ -56,9 +56,9 @@ inline void save_ppm(const image<W, H>& img, const std::string& filename) {
   std::vector<unsigned char> buffer;
   buffer.reserve(span.size() * 3);
   for (const auto& px : span) {
-    buffer.push_back(px.r);
-    buffer.push_back(px.g);
-    buffer.push_back(px.b);
+    buffer.push_back(px.r());
+    buffer.push_back(px.g());
+    buffer.push_back(px.b());
   }
 
   ofs.write(reinterpret_cast<const char*>(buffer.data()),

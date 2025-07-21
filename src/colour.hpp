@@ -14,20 +14,22 @@ template <colour_compatible T> struct colour {
   using value_type = T;
 
   [[nodiscard]] constexpr colour() noexcept = default;
-  [[nodiscard]] constexpr colour(T r, T g, T b) noexcept : m_rgb{r, g, b} {}
-  [[nodiscard]] constexpr explicit colour(vec3<T> v) noexcept : m_rgb{v} {}
+  [[nodiscard]] constexpr colour(const value_type r, const value_type g,
+                                 const value_type b) noexcept
+      : m_rgb{r, g, b} {}
+  [[nodiscard]] constexpr explicit colour(vec3<value_type> v) noexcept : m_rgb{v} {}
 
-  [[nodiscard]] constexpr auto r() const noexcept -> T {
+  [[nodiscard]] constexpr auto r() const noexcept -> value_type {
     return m_rgb.x();
   }
-  [[nodiscard]] constexpr auto g() const noexcept -> T {
+  [[nodiscard]] constexpr auto g() const noexcept -> value_type {
     return m_rgb.y();
   }
-  [[nodiscard]] constexpr auto b() const noexcept -> T {
+  [[nodiscard]] constexpr auto b() const noexcept -> value_type {
     return m_rgb.z();
   }
 
-  vec3<T> m_rgb;
+  vec3<value_type> m_rgb;
 };
 
 template <colour_compatible T>
@@ -37,12 +39,12 @@ template <colour_compatible T>
 }
 
 template <colour_compatible T>
-[[nodiscard]] constexpr auto operator*(T t, const colour<T>& c) noexcept -> colour<T> {
+[[nodiscard]] constexpr auto operator*(const T t, const colour<T>& c) noexcept -> colour<T> {
   return colour<T>{t * c.m_rgb};
 }
 
 template <colour_compatible T>
-[[nodiscard]] constexpr auto operator*(const colour<T>& c, T t) noexcept -> colour<T> {
+[[nodiscard]] constexpr auto operator*(const colour<T>& c, const T t) noexcept -> colour<T> {
   return colour<T>{c.m_rgb * t};
 }
 
