@@ -4,13 +4,13 @@
 #include "vec3.hpp"
 
 template <typename T>
-concept point3_compatible = vec3_compatible<T>;
+concept point3_value_type_compatible = requires {
+  requires vec3_value_type_compatible<T>;
+  requires std::is_trivially_copyable_v<T>;
+  requires std::is_trivially_default_constructible_v<T>;
+};
 
-template <point3_compatible T> class point3 {
-  static_assert(std::is_trivially_copyable_v<T>, "point3 requires trivially copyable types");
-  static_assert(std::is_trivially_default_constructible_v<T>,
-                "point3 requires trivially default‐constructible types");
-
+template <point3_value_type_compatible T> class point3 {
 public:
   using value_type = T;
 

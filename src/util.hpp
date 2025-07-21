@@ -15,12 +15,7 @@ template <typename T> struct float_type_of {
 template <typename T> using float_type_of_t = typename float_type_of<T>::type;
 
 template <typename T>
-concept sqrt_compatible = std::floating_point<T> && requires(T a, T b) {
-  { a + b } -> std::convertible_to<T>;
-  { a - b } -> std::convertible_to<T>;
-  { a * b } -> std::convertible_to<T>;
-  { a / b } -> std::convertible_to<T>;
-};
+concept sqrt_compatible = std::floating_point<T>;
 
 // constexpr sqrt using newton-raphson
 template <sqrt_compatible T> [[nodiscard]] constexpr T sqrt_constexpr(const T val) noexcept {

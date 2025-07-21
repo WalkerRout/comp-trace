@@ -7,20 +7,22 @@
 #include "vec3.hpp"
 
 template <typename T>
-concept ray_compatible = std::floating_point<T> && point3_compatible<T> && vec3_compatible<T>;
+concept ray_value_type_compatible = requires {
+  requires std::floating_point<T>;
+  requires vec3_value_type_compatible<T>;
+  requires point3_value_type_compatible<T>;
+  requires std::is_trivially_copyable_v<T>;
+  requires std::is_trivially_default_constructible_v<T>;
+};
 
-template <ray_compatible T> class ray {
-  static_assert(std::is_trivially_copyable_v<T>, "ray requires trivially copyable types");
-  static_assert(std::is_trivially_default_constructible_v<T>,
-                "ray requires trivially default‐constructible types");
-
+template <ray_value_type_compatible T> class ray {
 public:
   using value_type = T;
 
   [[nodiscard]] constexpr ray() noexcept = default;
-  [[nodiscard]] constexpr ray(const point3<value_type>& origin,
-                              const vec3<value_type>& direction) noexcept
-      : m_origin(origin), m_direction(direction) {}
+  [[nodiscard]] constexpr ray(const point3<value_type> origin,
+                              const vec3<value_type> direction) noexcept
+      : m_origin{origin}, m_direction{direction} {}
 
   [[nodiscard]] constexpr auto origin() const noexcept -> point3<value_type> {
     return m_origin;
@@ -40,15 +42,14 @@ private:
 
 using ray_d = ray<double>;
 
-template <ray_compatible T> struct hit_record {
+template <ray_value_type_compatible T> struct hit_record {
   [[nodiscard]] constexpr hit_record() noexcept = default;
 
-  constexpr void set_face_normal(const ray<T>& r, const vec3<T>& outward_normal) noexcept {
+  constexpr void set_face_normal(const ray<T> r, const vec3<T> outward_normal) noexcept {
     front_face = dot(r.direction(), outward_normal) < T{0};
     normal = front_face ? outward_normal : -outward_normal;
   }
 
-  // ray_compatible IS point3 and vec3 compatible...
   point3<T> p;
   vec3<T> normal;
   double t;

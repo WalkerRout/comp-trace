@@ -4,13 +4,13 @@
 #include "vec3.hpp"
 
 template <typename T>
-concept colour_compatible = vec3_compatible<T>;
+concept colour_value_type_compatible = requires {
+  requires vec3_value_type_compatible<T>;
+  requires std::is_trivially_copyable_v<T>;
+  requires std::is_trivially_default_constructible_v<T>;
+};
 
-template <colour_compatible T> class colour {
-  static_assert(std::is_trivially_copyable_v<T>, "colour requires trivially copyable types");
-  static_assert(std::is_trivially_default_constructible_v<T>,
-                "colour requires trivially default‐constructible types");
-
+template <colour_value_type_compatible T> class colour {
 public:
   using value_type = T;
 
@@ -18,7 +18,7 @@ public:
   [[nodiscard]] constexpr colour(const value_type r, const value_type g,
                                  const value_type b) noexcept
       : m_rgb{r, g, b} {}
-  [[nodiscard]] constexpr explicit colour(vec3<value_type> v) noexcept : m_rgb{v} {}
+  [[nodiscard]] constexpr explicit colour(const vec3<value_type> v) noexcept : m_rgb{v} {}
 
   [[nodiscard]] constexpr auto r() const noexcept -> value_type {
     return m_rgb.x();

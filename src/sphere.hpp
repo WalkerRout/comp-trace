@@ -11,13 +11,13 @@
 #include "vec3.hpp"
 
 template <typename T>
-concept sphere_compatible = std::floating_point<T> && point3_compatible<T>;
+concept sphere_value_type_compatible = requires {
+  requires point3_value_type_compatible<T>;
+  requires std::is_trivially_copyable_v<T>;
+  requires std::is_trivially_default_constructible_v<T>;
+};
 
-template <sphere_compatible T> class sphere {
-  static_assert(std::is_trivially_copyable_v<T>, "sphere requires trivially copyable types");
-  static_assert(std::is_trivially_default_constructible_v<T>,
-                "sphere requires trivially default‐constructible types");
-
+template <sphere_value_type_compatible T> class sphere {
 public:
   using value_type = T;
 

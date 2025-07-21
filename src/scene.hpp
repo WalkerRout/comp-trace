@@ -12,23 +12,24 @@
 
 // for complex objects to be placed inside of a scene...
 template <typename T>
-concept scene_compatible =
+concept scene_value_type_compatible =
     requires {
       // we need to be able to extract a float type...
       typename float_type_of_t<T>;
+      requires std::floating_point<float_type_of_t<T>>;
     } &&
     requires(T obj, ray<float_type_of_t<T>> r, float_type_of_t<T> t_min, float_type_of_t<T> t_max) {
       { obj.hit(r, t_min, t_max) } -> std::same_as<std::optional<hit_record<float_type_of_t<T>>>>;
     };
 
-template <scene_compatible T, std::size_t N> class scene;
+template <scene_value_type_compatible T, std::size_t N> class scene;
 
 // scene extracts nested float type
-template <scene_compatible T, std::size_t N> struct float_type_of<scene<T, N>> {
+template <scene_value_type_compatible T, std::size_t N> struct float_type_of<scene<T, N>> {
   using type = float_type_of_t<T>; // recurse
 };
 
-template <scene_compatible T, std::size_t N> class scene {
+template <scene_value_type_compatible T, std::size_t N> class scene {
 public:
   using value_type = T;
   using size_type = std::size_t;

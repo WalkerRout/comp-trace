@@ -7,13 +7,13 @@
 #include "colour.hpp"
 
 template <typename T>
-concept pixel_compatible = std::unsigned_integral<T> && sizeof(T) == 1;
+concept pixel_value_type_compatible = requires {
+  requires colour_value_type_compatible<T>;
+  requires std::is_trivially_copyable_v<T>;
+  requires std::is_trivially_default_constructible_v<T>;
+};
 
-template <pixel_compatible T> class pixel {
-  static_assert(std::is_trivially_copyable_v<T>, "pixel requires trivially copyable types");
-  static_assert(std::is_trivially_default_constructible_v<T>,
-                "pixel requires trivially default‐constructible types");
-
+template <pixel_value_type_compatible T> class pixel {
 public:
   using value_type = T;
 
