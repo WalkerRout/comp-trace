@@ -56,10 +56,12 @@ template <colour_value_type_compatible C, pixel_value_type_compatible P>
 }
 
 template <scene_value_type_compatible Scene>
-[[nodiscard]] constexpr auto ray_colour(const ray<float_type_of_t<Scene>>& r,
+[[nodiscard]] constexpr auto ray_colour(const ray<extracted_value_type_of_t<Scene>>& r,
                                         const Scene& world) noexcept
-    -> colour<float_type_of_t<Scene>> {
-  using float_type = float_type_of_t<Scene>;
+    -> colour<extracted_value_type_of_t<Scene>>
+  requires(std::floating_point<extracted_value_type_of_t<Scene>>)
+{
+  using float_type = extracted_value_type_of_t<Scene>;
 
   const auto hit = world.hit(r, std::numeric_limits<float_type>::epsilon(),
                              std::numeric_limits<float_type>::infinity());

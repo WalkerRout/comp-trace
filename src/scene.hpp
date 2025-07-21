@@ -16,26 +16,30 @@ namespace rt {
 template <typename T>
 concept scene_value_type_compatible =
     requires {
-      // we need to be able to extract a float type...
-      typename float_type_of_t<T>;
-      requires std::floating_point<float_type_of_t<T>>;
-    } &&
-    requires(T obj, ray<float_type_of_t<T>> r, float_type_of_t<T> t_min, float_type_of_t<T> t_max) {
-      { obj.hit(r, t_min, t_max) } -> std::same_as<std::optional<hit_record<float_type_of_t<T>>>>;
+      // we need to be able to extract a value_type...
+      typename extracted_value_type_of_t<T>;
+      // that is a float...
+      requires std::floating_point<extracted_value_type_of_t<T>>;
+    } && requires(T obj, ray<extracted_value_type_of_t<T>> r, extracted_value_type_of_t<T> t_min,
+                  extracted_value_type_of_t<T> t_max) {
+      {
+        obj.hit(r, t_min, t_max)
+      } -> std::same_as<std::optional<hit_record<extracted_value_type_of_t<T>>>>;
     };
 
 template <scene_value_type_compatible T, std::size_t N> class scene;
 
-// scene extracts nested float type
-template <scene_value_type_compatible T, std::size_t N> struct float_type_of<scene<T, N>> {
-  using type = float_type_of_t<T>; // recurse
+// scene extracts nested value_type
+template <scene_value_type_compatible T, std::size_t N>
+struct extracted_value_type_of<scene<T, N>> {
+  using type = extracted_value_type_of_t<T>; // recurse
 };
 
 template <scene_value_type_compatible T, std::size_t N> class scene {
 public:
   using value_type = T;
   using size_type = std::size_t;
-  using float_type = float_type_of_t<T>;
+  using float_type = extracted_value_type_of_t<T>;
 
   [[nodiscard]] constexpr scene() noexcept = default;
 

@@ -9,12 +9,16 @@
 namespace rt {
 
 // provide some way to access float_values, can specialize to recurse...
-template <typename T> struct float_type_of {
+template <typename T> struct extracted_value_type_of {
   // for basic objects like sphere
   using type = typename T::value_type;
 };
 
-template <typename T> using float_type_of_t = typename float_type_of<T>::type;
+template <std::floating_point T> struct extracted_value_type_of<T> {
+  using type = T;
+};
+
+template <typename T> using extracted_value_type_of_t = typename extracted_value_type_of<T>::type;
 
 template <typename T>
 concept sqrt_compatible = std::floating_point<T>;
