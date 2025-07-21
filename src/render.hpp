@@ -17,15 +17,12 @@
 #include "sphere.hpp"
 #include "util.hpp"
 
-template <std::size_t W, std::size_t H>
-concept valid_render_dimensions =
-    (W > 0) && (H > 0) && (W * H <= std::numeric_limits<std::size_t>::max() / 3);
-
 template <std::size_t N> using sphere_scene = scene<sphere_d, N>;
 
-[[nodiscard]] constexpr auto build_scene() noexcept -> sphere_scene<2> {
-  sphere_scene<2> world{};
+[[nodiscard]] constexpr auto build_scene() noexcept -> sphere_scene<3> {
+  sphere_scene<3> world{};
   world.add(sphere_d{{0.0, 0.0, -1.0}, 0.5});
+  world.add(sphere_d{{1.3, 0.0, -0.9}, 0.2});
   world.add(sphere_d{{0.0, -100.5, -1.0}, 100.0});
   return world;
 }
@@ -79,6 +76,10 @@ template <scene_value_type_compatible Scene>
   const colour<float_type> blue{float_type{0.5}, float_type{0.7}, float_type{1}};
   return (float_type{1} - t) * white + t * blue;
 }
+
+template <std::size_t W, std::size_t H>
+concept valid_render_dimensions =
+    (W > 0) && (H > 0) && (W * H <= std::numeric_limits<std::size_t>::max() / 3);
 
 template <std::size_t Width, std::size_t Height>
   requires valid_render_dimensions<Width, Height>

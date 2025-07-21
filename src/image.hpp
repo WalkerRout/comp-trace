@@ -4,7 +4,9 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <format>
 #include <fstream>
+#include <iostream>
 #include <ranges>
 #include <span>
 #include <vector>
@@ -39,6 +41,24 @@ private:
 
   std::array<pixel_u8, dims::size> m_pixels{};
 };
+
+template <std::size_t W, std::size_t H>
+inline void dump_bytes(const image<W, H>& img, std::ostream& out = std::cout) {
+  // header comes first...
+  out << std::format("P6\n{} {}\n255\n", W, H);
+  auto pixels = img.pixels();
+  for (std::size_t r = 0; r < H; ++r) {
+    for (std::size_t c = 0; c < W; ++c) {
+      auto& p = pixels[r * W + c];
+      // emit each byte, 6 hex digits total...
+      out << std::format("{:02X}{:02X}{:02X}", p.r(), p.g(), p.b());
+      if (c + 1 < W) {
+        out << ' ';
+      }
+    }
+    out << '\n';
+  }
+}
 
 template <std::size_t W, std::size_t H>
 inline void save_ppm(const image<W, H>& img, const std::string& filename) {

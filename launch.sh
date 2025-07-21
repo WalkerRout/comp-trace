@@ -12,5 +12,5 @@ echo "tidying..."
 #  -- -I./src -std=c++23 -fconstexpr-steps=80000000
 
 echo "building..."
-clang++ -std=c++23 -o bin/main ./src/*.cpp -I./src/ $WARNINGS -O3 -fconstexpr-steps=200000000
-./bin/main > out.ppm
+clang++ -std=c++23 -o bin/main ./src/*.cpp -I./src/ $WARNINGS -O3 -fconstexpr-steps=200000000 && \
+./bin/main
