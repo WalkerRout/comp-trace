@@ -16,8 +16,6 @@ template <std::size_t W, std::size_t H> struct image_dimensions {
   static constexpr std::size_t height = H;
   static constexpr std::size_t size = W * H;
 
-  static_assert(width > 0, "image width must be positive");
-  static_assert(height > 0, "image height must be positive");
   static_assert(size <= std::numeric_limits<std::size_t>::max() / 3, "image too large");
 };
 

@@ -6,11 +6,12 @@
 template <typename T>
 concept colour_compatible = vec3_compatible<T>;
 
-template <colour_compatible T> struct colour {
+template <colour_compatible T> class colour {
   static_assert(std::is_trivially_copyable_v<T>, "colour requires trivially copyable types");
   static_assert(std::is_trivially_default_constructible_v<T>,
                 "colour requires trivially default‐constructible types");
 
+public:
   using value_type = T;
 
   [[nodiscard]] constexpr colour() noexcept = default;
@@ -29,24 +30,25 @@ template <colour_compatible T> struct colour {
     return m_rgb.z();
   }
 
+  // hidden friends
+  [[nodiscard]] friend constexpr auto operator+(const colour<T>& c1, const colour<T>& c2) noexcept
+      -> colour<T> {
+    return colour<T>{c1.m_rgb + c2.m_rgb};
+  }
+
+  [[nodiscard]] friend constexpr auto operator*(const T t, const colour<T>& c) noexcept
+      -> colour<T> {
+    return colour<T>{t * c.m_rgb};
+  }
+
+  [[nodiscard]] friend constexpr auto operator*(const colour<T>& c, const T t) noexcept
+      -> colour<T> {
+    return colour<T>{c.m_rgb * t};
+  }
+
+private:
   vec3<value_type> m_rgb;
 };
-
-template <colour_compatible T>
-[[nodiscard]] constexpr auto operator+(const colour<T>& c1, const colour<T>& c2) noexcept
-    -> colour<T> {
-  return colour<T>{c1.m_rgb + c2.m_rgb};
-}
-
-template <colour_compatible T>
-[[nodiscard]] constexpr auto operator*(const T t, const colour<T>& c) noexcept -> colour<T> {
-  return colour<T>{t * c.m_rgb};
-}
-
-template <colour_compatible T>
-[[nodiscard]] constexpr auto operator*(const colour<T>& c, const T t) noexcept -> colour<T> {
-  return colour<T>{c.m_rgb * t};
-}
 
 using colour_d = colour<double>;
 

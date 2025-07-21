@@ -4,14 +4,17 @@
 #include <cassert>
 #include <cstdint>
 
+#include "colour.hpp"
+
 template <typename T>
 concept pixel_compatible = std::unsigned_integral<T> && sizeof(T) == 1;
 
-template <pixel_compatible T> struct pixel {
+template <pixel_compatible T> class pixel {
   static_assert(std::is_trivially_copyable_v<T>, "pixel requires trivially copyable types");
   static_assert(std::is_trivially_default_constructible_v<T>,
                 "pixel requires trivially default‐constructible types");
 
+public:
   using value_type = T;
 
   [[nodiscard]] constexpr pixel() noexcept = default;
@@ -29,6 +32,7 @@ template <pixel_compatible T> struct pixel {
     return m_colour.b();
   }
 
+private:
   colour<value_type> m_colour;
 };
 

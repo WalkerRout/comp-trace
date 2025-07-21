@@ -32,23 +32,17 @@ template <std::size_t N> using sphere_scene = scene<sphere_d, N>;
 }
 
 // compute pixel with proper colour space handling...
-[[nodiscard]] constexpr auto colour_to_pixel(const colour_d& c) noexcept -> pixel_u8 {
-  const auto conv = [](double v) {
-    const auto x = static_cast<int32_t>(v * 255.999);
-    if (x < 0) {
-      return static_cast<uint8_t>(0);
-    }
-    if (x > 255) {
-      return static_cast<uint8_t>(255);
-    }
-    return static_cast<uint8_t>(x);
+[[nodiscard]] inline constexpr pixel_u8 colour_to_pixel(const colour_d& c) noexcept {
+  const auto to_byte = [](const double v) constexpr noexcept -> uint8_t {
+    return static_cast<uint8_t>(std::clamp<int32_t>(static_cast<int32_t>(v * 255.999), 0, 255));
   };
-  return {conv(c.r()), conv(c.g()), conv(c.b())};
+  return {to_byte(c.r()), to_byte(c.g()), to_byte(c.b())};
 }
 
 // colour a ray given some world...
-template <scene_compatible S>
-[[nodiscard]] constexpr auto ray_colour(const ray_d& r, const S& world) noexcept -> colour_d {
+template <std::size_t N>
+[[nodiscard]] constexpr auto ray_colour(const ray_d& r, const sphere_scene<N>& world) noexcept
+    -> colour_d {
   const auto hit =
       world.hit(r, std::numeric_limits<double>::epsilon(), std::numeric_limits<double>::infinity());
   if (hit) {

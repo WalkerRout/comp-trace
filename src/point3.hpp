@@ -6,11 +6,12 @@
 template <typename T>
 concept point3_compatible = vec3_compatible<T>;
 
-template <point3_compatible T> struct point3 {
+template <point3_compatible T> class point3 {
   static_assert(std::is_trivially_copyable_v<T>, "point3 requires trivially copyable types");
   static_assert(std::is_trivially_default_constructible_v<T>,
                 "point3 requires trivially default‐constructible types");
 
+public:
   using value_type = T;
 
   [[nodiscard]] constexpr point3() noexcept = default;
@@ -29,24 +30,25 @@ template <point3_compatible T> struct point3 {
     return m_coords.z();
   }
 
+  // hidden friends
+  [[nodiscard]] friend constexpr auto operator+(const point3& p, const vec3<T>& v) noexcept
+      -> point3 {
+    return point3{p.m_coords + v};
+  }
+
+  [[nodiscard]] friend constexpr auto operator-(const point3& p1, const point3& p2) noexcept
+      -> vec3<T> {
+    return p1.m_coords - p2.m_coords;
+  }
+
+  [[nodiscard]] friend constexpr auto operator-(const point3& p, const vec3<T>& v) noexcept
+      -> point3 {
+    return point3{p.m_coords - v};
+  }
+
+private:
   vec3<value_type> m_coords;
 };
-
-template <point3_compatible T>
-[[nodiscard]] constexpr auto operator+(const point3<T>& p, const vec3<T>& v) noexcept -> point3<T> {
-  return point3<T>{p.m_coords + v};
-}
-
-template <point3_compatible T>
-[[nodiscard]] constexpr auto operator-(const point3<T>& p1, const point3<T>& p2) noexcept
-    -> vec3<T> {
-  return p1.m_coords - p2.m_coords;
-}
-
-template <point3_compatible T>
-[[nodiscard]] constexpr auto operator-(const point3<T>& p, const vec3<T>& v) noexcept -> point3<T> {
-  return point3<T>{p.m_coords - v};
-}
 
 using point3_d = point3<double>;
 

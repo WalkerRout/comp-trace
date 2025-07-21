@@ -77,7 +77,4 @@ private:
 
 using sphere_d = sphere<double>;
 
-// we should be able to move sphere around wherever we want...
-static_assert(std::is_trivially_copyable_v<sphere_d>, "sphere_d must be trivially copyable");
-
 #endif // SPHERE_HPP

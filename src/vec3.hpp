@@ -38,10 +38,10 @@ public:
     return m_elems[2];
   }
 
-  [[nodiscard]] constexpr auto operator[](const std::size_t i) const noexcept -> value_type {
+  [[nodiscard]] constexpr auto operator[](const std::size_t i) noexcept -> value_type& {
     return m_elems[i];
   }
-  [[nodiscard]] constexpr auto operator[](const std::size_t i) noexcept -> value_type& {
+  [[nodiscard]] constexpr auto operator[](const std::size_t i) const noexcept -> value_type {
     return m_elems[i];
   }
 
@@ -76,46 +76,51 @@ public:
     return sqrt_constexpr(length_squared());
   }
 
+  // hidden friends
+  [[nodiscard]] friend constexpr auto operator+(const vec3<value_type>& u,
+                                                const vec3<value_type>& v) noexcept
+      -> vec3<value_type> {
+    return vec3<value_type>{u.x() + v.x(), u.y() + v.y(), u.z() + v.z()};
+  }
+
+  [[nodiscard]] friend constexpr auto operator-(const vec3<value_type>& v) noexcept
+      -> vec3<value_type> {
+    return vec3<value_type>{-v.x(), -v.y(), -v.z()};
+  }
+
+  [[nodiscard]] friend constexpr auto operator-(const vec3<value_type>& u,
+                                                const vec3<value_type>& v) noexcept
+      -> vec3<value_type> {
+    return vec3<value_type>{u.x() - v.x(), u.y() - v.y(), u.z() - v.z()};
+  }
+
+  [[nodiscard]] friend constexpr auto operator*(const vec3<value_type>& u,
+                                                const vec3<value_type>& v) noexcept
+      -> vec3<value_type> {
+    return vec3<value_type>{u.x() * v.x(), u.y() * v.y(), u.z() * v.z()};
+  }
+
+  [[nodiscard]] friend constexpr auto operator*(const value_type t,
+                                                const vec3<value_type>& v) noexcept
+      -> vec3<value_type> {
+    return vec3<value_type>{t * v.x(), t * v.y(), t * v.z()};
+  }
+
+  [[nodiscard]] friend constexpr auto operator*(const vec3<value_type>& v,
+                                                const value_type t) noexcept -> vec3<value_type> {
+    return t * v;
+  }
+
+  [[nodiscard]] friend constexpr auto operator/(const vec3<value_type> v,
+                                                const value_type t) noexcept -> vec3<value_type>
+    requires(std::floating_point<value_type>)
+  {
+    return (value_type{1} / t) * v;
+  }
+
 private:
-  std::array<T, 3> m_elems{};
+  std::array<value_type, 3> m_elems{};
 };
-
-template <vec3_compatible T>
-[[nodiscard]] constexpr auto operator+(const vec3<T>& u, const vec3<T>& v) noexcept -> vec3<T> {
-  return vec3<T>{u.x() + v.x(), u.y() + v.y(), u.z() + v.z()};
-}
-
-template <vec3_compatible T>
-[[nodiscard]] constexpr auto operator-(const vec3<T>& v) noexcept -> vec3<T> {
-  return vec3<T>(-v.x(), -v.y(), -v.z());
-}
-
-template <vec3_compatible T>
-[[nodiscard]] constexpr auto operator-(const vec3<T>& u, const vec3<T>& v) noexcept -> vec3<T> {
-  return vec3<T>{u.x() - v.x(), u.y() - v.y(), u.z() - v.z()};
-}
-
-template <vec3_compatible T>
-[[nodiscard]] constexpr auto operator*(const vec3<T>& u, const vec3<T>& v) noexcept -> vec3<T> {
-  return vec3<T>{u.x() * v.x(), u.y() * v.y(), u.z() * v.z()};
-}
-
-template <vec3_compatible T>
-[[nodiscard]] constexpr auto operator*(const T t, const vec3<T>& v) noexcept -> vec3<T> {
-  return vec3<T>{t * v.x(), t * v.y(), t * v.z()};
-}
-
-template <vec3_compatible T>
-[[nodiscard]] constexpr auto operator*(const vec3<T>& v, const T t) noexcept -> vec3<T> {
-  return t * v;
-}
-
-template <vec3_compatible T>
-[[nodiscard]] constexpr auto operator/(const vec3<T> v, const T t) noexcept -> vec3<T>
-  requires(std::floating_point<T>)
-{
-  return (1 / t) * v;
-}
 
 template <vec3_compatible T>
 [[nodiscard]] constexpr auto dot(const vec3<T>& u, const vec3<T>& v) noexcept -> T {

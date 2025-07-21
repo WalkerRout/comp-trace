@@ -41,16 +41,18 @@ private:
 using ray_d = ray<double>;
 
 template <ray_compatible T> struct hit_record {
-  // ray_compatible IS point3 and vec3 compatible...
-  point3<T> p;
-  vec3<T> normal;
-  double t;
-  bool front_face;
+  [[nodiscard]] constexpr hit_record() noexcept = default;
 
   constexpr void set_face_normal(const ray<T>& r, const vec3<T>& outward_normal) noexcept {
     front_face = dot(r.direction(), outward_normal) < T{0};
     normal = front_face ? outward_normal : -outward_normal;
   }
+
+  // ray_compatible IS point3 and vec3 compatible...
+  point3<T> p;
+  vec3<T> normal;
+  double t;
+  bool front_face;
 };
 
 using hit_record_d = hit_record<double>;
