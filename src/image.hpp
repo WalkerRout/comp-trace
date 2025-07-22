@@ -19,11 +19,17 @@ template <std::size_t W, std::size_t H> struct image_dimensions {
   static constexpr std::size_t width = W;
   static constexpr std::size_t height = H;
   static constexpr std::size_t size = W * H;
-
-  static_assert(size <= std::numeric_limits<std::size_t>::max() / 3, "image too large");
 };
 
-template <std::size_t Width, std::size_t Height> class image {
+template <std::size_t W, std::size_t H>
+concept valid_image_dimensions =
+    (W > 0) && (H > 0) && (W * H <= std::numeric_limits<std::size_t>::max() / 3);
+
+template <std::size_t Width, std::size_t Height>
+// an image requires valid dimensions on construction, s.t. we can never have an image with invalid
+// Width or Height values...
+  requires(valid_image_dimensions<Width, Height>)
+class image {
 public:
   using value_type = pixel_u8;
   using size_type = std::size_t;

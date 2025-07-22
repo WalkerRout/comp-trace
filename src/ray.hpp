@@ -48,6 +48,8 @@ template <ray_value_type_compatible T> struct hit_record {
   [[nodiscard]] constexpr hit_record() noexcept = default;
 
   constexpr void set_face_normal(const ray<T> r, const vec3<T> outward_normal) noexcept {
+    p = {};
+    t = {};
     front_face = dot(r.direction(), outward_normal) < T{0};
     normal = front_face ? outward_normal : -outward_normal;
   }

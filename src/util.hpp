@@ -24,7 +24,8 @@ template <typename T>
 concept sqrt_compatible = std::floating_point<T>;
 
 // constexpr sqrt using newton-raphson
-template <sqrt_compatible T> [[nodiscard]] constexpr T sqrt_constexpr(const T val) noexcept {
+template <sqrt_compatible T>
+[[nodiscard]] constexpr auto sqrt_constexpr(const T val) noexcept -> T {
   if (val < T{0}) {
     return std::numeric_limits<T>::quiet_NaN();
   }

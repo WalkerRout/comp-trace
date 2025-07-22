@@ -81,12 +81,8 @@ template <scene_value_type_compatible Scene>
   return (float_type{1} - t) * white + t * blue;
 }
 
-template <std::size_t W, std::size_t H>
-concept valid_render_dimensions =
-    (W > 0) && (H > 0) && (W * H <= std::numeric_limits<std::size_t>::max() / 3);
-
 template <std::size_t Width, std::size_t Height>
-  requires valid_render_dimensions<Width, Height>
+  requires valid_image_dimensions<Width, Height>
 [[nodiscard]] consteval auto render() noexcept -> image<Width, Height> {
   const auto world = build_scene();
   const camera cam{};

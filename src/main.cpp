@@ -10,8 +10,8 @@ auto main(int argc, char* argv[]) -> int {
   (void)argc;
   (void)argv;
 
-  static constexpr render_params<128, 96> params{};
-  static constexpr auto img = rt::render<params.width, params.height>();
+  using params = render_params<128, 96>;
+  static constexpr auto img = rt::render<params::width, params::height>();
 
   // dump the bytes that make up the image...
   rt::dump_bytes(img);
